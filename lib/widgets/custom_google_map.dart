@@ -20,10 +20,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     super.initState();
   }
 
+  Set<Marker> markes = {};
   late GoogleMapController googleMapController;
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
+      markers: markes,
       onMapCreated: (controller) {
         googleMapController = controller;
 

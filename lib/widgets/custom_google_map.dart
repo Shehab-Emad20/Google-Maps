@@ -43,18 +43,24 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     googleMapController.setMapStyle(nightMapStyle);
   }
 
-  void initMarkes() {
+  void initMarkes() async {
+    var customMarkerIcons = await BitmapDescriptor.asset(
+      ImageConfiguration(),
+      'assets/images/map-pin-icon-map-marker-illustration-10-eps-vector.jpg',
+    );
     var myMarkers =
         place
             .map(
               (e) => Marker(
                 infoWindow: InfoWindow(title: e.name),
+                icon: customMarkerIcons,
                 position: e.lat,
                 markerId: MarkerId(e.id.toString()),
               ),
             )
             .toSet();
     markes.addAll(myMarkers);
+    setState(() {});
   }
 }
 

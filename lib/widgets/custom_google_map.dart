@@ -28,6 +28,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
+      zoomControlsEnabled: false,
       markers: markes,
       onMapCreated: (controller) {
         googleMapController = controller;

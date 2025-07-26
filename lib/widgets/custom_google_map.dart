@@ -1,4 +1,6 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps/models/place_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -43,10 +45,25 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     googleMapController.setMapStyle(nightMapStyle);
   }
 
+  Future<Uint8List> getImageFromRawData(String image, double width) async {
+    var imageData = await rootBundle.load(image);
+    var imageCodec = await ui.instantiateImageCodec(
+      imageData.buffer.asUint8List(),
+      targetWidth: width.round(),
+    );
+    var imageFarm = await imageCodec.getNextFrame();
+    var imageBaytData = await imageFarm.image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+    return imageBaytData!.buffer.asUint8List();
+  }
+
   void initMarkes() async {
-    var customMarkerIcons = await BitmapDescriptor.asset(
-      ImageConfiguration(),
-      'assets/images/map-pin-icon-map-marker-illustration-10-eps-vector.jpg',
+    var customMarkerIcons = BitmapDescriptor.bytes(
+      await getImageFromRawData(
+        'assets/images/map-pin-icon-map-marker-illustration-10-eps-vector.jpg',
+        100,
+      ),
     );
     var myMarkers =
         place
@@ -62,10 +79,10 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     markes.addAll(myMarkers);
     setState(() {});
   }
-}
 
-//world view 0 -> 3
-// country view 4 -> 6
-// city view 10 -> 12
-// street view 13 -> 17
-// building view 18 -> 20
+  //world view 0 -> 3
+  // country view 4 -> 6
+  // city view 10 -> 12
+  // street view 13 -> 17
+  // building view 18 -> 20
+}

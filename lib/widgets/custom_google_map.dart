@@ -20,14 +20,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       target: LatLng(28.086989296490174, 30.761086274847088),
     );
     initMarkes();
+    initPolylines();
     super.initState();
   }
 
   Set<Marker> markes = {};
+  Set<Polyline> polylines = {};
   late GoogleMapController googleMapController;
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
+      polylines: polylines,
       zoomControlsEnabled: false,
       markers: markes,
       onMapCreated: (controller) {
@@ -79,6 +82,23 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
             .toSet();
     markes.addAll(myMarkers);
     setState(() {});
+  }
+
+  void initPolylines() {
+    Polyline polyline = Polyline(
+      geodesic: true,
+      patterns: [PatternItem.dot],
+      zIndex: 2,
+      startCap: Cap.roundCap,
+      color: Colors.red,
+      polylineId: PolylineId('1'),
+      points: [
+        LatLng(0.050320237433272, 31.370212213398904),
+        LatLng(28.129084127619905, 30.926770727654898),
+        LatLng(31.25828502126786, 30.381707234761233),
+      ],
+    );
+    polylines.add(polyline);
   }
 
   //world view 0 -> 3
